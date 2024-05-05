@@ -12,7 +12,15 @@ public class AlunoBean {
     String nome = "";
     String cpf = "";
     char sexo;
-
+    
+    public AlunoBean(){}
+    
+    public AlunoBean(String nome, String cpf, char sexo){
+        setNome(nome);
+        setCpf(cpf);
+        setSexo(sexo);
+    }
+    
     public char getSexo() {
         return sexo;
     }

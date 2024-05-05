@@ -6,6 +6,7 @@ package Model;
 
 import DAO.MySQLConnection;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class AlunoDAO implements AlunoDAOInterface{
             Statement st = con.createStatement();
             st.execute(sql.toString());
             st.close();
-            con.close();
             
             return true;
         } catch (SQLException ex) {
@@ -43,22 +43,75 @@ public class AlunoDAO implements AlunoDAOInterface{
 
     @Override
     public boolean removeAluno(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        StringBuilder remover = new StringBuilder();
+        remover.append("delete from aluno where cpf = '").append(cpf).append("'");
+        try {
+            MySQLConnection db = MySQLConnection.getInstance();
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            st.execute(remover.toString());
+            st.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override
     public boolean alterarAluno(AlunoBean aluno) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = " update aluno" +
+                     " set nome = '" + aluno.getNome()+"',"+
+                     " sexo = '" + aluno.getSexo()+"'"+
+                     " where cpf = '" + aluno.getCpf()+"'";
+        try {
+            MySQLConnection db = MySQLConnection.getInstance();
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            st.execute(sql);
+            st.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override
     public AlunoBean consultarPorCpf(String cpf) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        AlunoBean aluno = null;
+        String sql = "select * from aluno where cpf = '" + cpf + "'";
+        try {
+            MySQLConnection db = MySQLConnection.getInstance();
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                aluno = new AlunoBean(rs.getString("nome"), rs.getString("cpf"), rs.getString("sexo").charAt(0));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return aluno;
     }
 
     @Override
     public ArrayList<AlunoBean> getAlunos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<AlunoBean> alunos = new ArrayList<AlunoBean>();
+        String sql = "select * from aluno";
+        try {
+            MySQLConnection db = MySQLConnection.getInstance();
+            Connection con = db.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                AlunoBean aluno = new AlunoBean(rs.getString("nome"), rs.getString("cpf"), rs.getString("sexo").charAt(0));
+                alunos.add(aluno);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return alunos;
     }
     
 }

@@ -15,7 +15,7 @@ public class MySQLConnection {
     private static Connection connection = null;
 
     public MySQLConnection() throws SQLException{
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mvc","root","Unisul@1520");
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mvc","root","usuario"); //Unisul@1520
     }
 
     public static synchronized MySQLConnection getInstance() throws SQLException {

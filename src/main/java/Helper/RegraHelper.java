@@ -9,7 +9,19 @@ package Helper;
  * @author 1072221113
  */
 public class RegraHelper {
+    
+    public static boolean validarTodosIguais(String literal){
+        if(literal == null || literal.isEmpty()) return true;
+        String primeiro = literal.substring(0,1);
+        literal = literal.replaceAll(primeiro, "");
+        return (literal.isEmpty());
+    }
+    
     public static boolean validarCPF(String cpf){
+        
+        cpf = cpf.replaceAll("[^0-9]", "");
+        if (cpf.length() != 11) return false;
+        if(validarTodosIguais(cpf)) return false;
         
         int[] cpfArray = new int[(cpf.length()-2)]; //Pegar os primeiros 9 dígitos do CPF
         for (int i = 0; i < cpfArray.length; i++) {
